@@ -1,2 +1,0 @@
-# ProgramSoul
-Programming`s skill
