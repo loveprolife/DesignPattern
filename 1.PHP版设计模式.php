@@ -444,7 +444,43 @@ Client::main();
 
 ![image](https://github.com/loveprolife/IMG/blob/master/5.png)
 
+<?php
 
+
+class singleton {
+	private static $_instance;
+
+	private function __construct () {
+		echo 'can not new';
+	}
+
+	private function __clone() {
+		echo 'can not clone';
+	}
+
+	public static function getInstance () {
+		if (!(self::$_instance instanceof self)) {
+			self::$_instance = new self;
+		}
+		return self::$_instance;
+	}
+
+	public function test () {
+		echo 'success';
+	}
+}
+
+//new实例化private的构造函数报错
+//$single = new singleton();	//Fatal error: Call to private singleton::__construct() from invalid context in D:\WWW\test.php on line 28
+
+//正确获取实例的方法
+$single = singleton::getInstance();
+$single->test();
+
+//克隆对象报错
+$single_test = clone $single;	//Fatal error: Call to private singleton::__clone() from context '' in D:\WWW\test.php on line 35
+
+?>
 
 
 
