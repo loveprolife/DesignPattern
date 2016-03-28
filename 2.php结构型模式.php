@@ -129,7 +129,125 @@ client::main();
 
 ![image](https://github.com/loveprolife/IMG/blob/master/composite.png)
 
+<?php
 
+abstract class Company {
+	protected $name;
+
+	protected function __construct ($name) {
+		$this->name = $name;
+	}
+
+	abstract function Add (Company $company);
+
+	abstract function Remove (Company $company);
+
+	abstract function Display ($depth = 0);
+}
+
+class SubCompany extends Company {
+	private $sub_companys = array();
+
+	public function __construct ($name) {
+		parent::__construct($name);
+	}
+
+	public function Add (Company $company) {
+		$this->sub_companys[] = $company;
+	}
+
+	public function Remove (Company $company) {
+		$key = array_search($company, $this->sub_companys);
+		if ($key !== false) {
+			unset($this->sub_companys[$key]);
+		}
+	}
+
+	public function Display ($depth = 0) {
+		$pre = '';
+		for ($i=0; $i<$depth; $i++) {
+			$pre .= '-';
+		}
+		$pre .= $this->name;
+		echo $pre;
+		echo '<br/>';
+
+		foreach ($this->sub_companys as $v) {
+			$v->Display($depth+2);
+		}
+	}
+}
+
+class MoneyDept extends Company {
+	public function __construct ($name) {
+		parent::__construct($name);
+	}
+
+	public function Add (Company $company) {
+		echo '叶子节点，不能继续添加节点。';
+	}
+
+	public function Remove (Company $company) {
+		echo '叶子节点，不能删除节点。';
+	}
+
+	public function Display ($depth = 0) {
+		$pre = '';
+		for ($i=0; $i<$depth; $i++) {
+			$pre .= '-';
+		}
+		$pre .= $this->name;
+		echo $pre;
+		echo '<br/>';
+	}
+}
+
+class TechnologyDept extends Company {
+	public function __construct ($name) {
+		parent::__construct($name);
+	}
+
+	public function Add (Company $company) {
+		echo '叶子节点，不能继续添加节点。';
+	}
+
+	public function Remove (Company $company) {
+		echo '叶子节点，不能删除节点。';
+	}
+
+	public function Display ($depth = 0) {
+		$pre = '';
+		for ($i=0; $i<$depth; $i++) {
+			$pre .= '-';
+		}
+		$pre .= $this->name;
+		echo $pre;
+		echo '<br/>';
+	}
+}
+
+class Client {
+	public static function main () {
+		$root = new SubCompany('北京总公司');
+		$root->Add(new MoneyDept('北京总公司财务部'));
+		$root->Add(new TechnologyDept('北京总公司技术部'));
+
+		$shanghai = new SubCompany('上海分公司');
+		$shanghai->Add(new MoneyDept('上海分公司财务部'));
+		$shanghai->Add(new TechnologyDept('上海分公司技术部'));
+		$root->Add($shanghai);
+
+		$root->Display();
+		
+		$root->Remove($shanghai);
+
+		$root->Display();
+	}
+}
+
+Client::main();
+
+?>
 
 
 4.装饰器模式
