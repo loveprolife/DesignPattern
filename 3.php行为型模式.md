@@ -1,6 +1,6 @@
 1.策略模式
 
-![image](https://github.com/loveprolife/IMG/blob/master/shipeiqi.gif)
+![image](https://github.com/loveprolife/IMG/blob/master/celue.png)
 
 <?php  
 
