@@ -334,7 +334,7 @@ while(!$iterator->IsDone()){
 
 5.责任链模式
 
-![image](https://github.com/loveprolife/IMG/blob/master/celue.png)
+![image](https://github.com/loveprolife/IMG/blob/master/chain.png)
 
 <?php
 
