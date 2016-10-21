@@ -193,7 +193,7 @@ $flyMe->MakeFlow();
 
 ?>
 
-3.观察者模式
+3.观察者模式(观察者模式又叫做发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式)
 
 ![image](https://github.com/loveprolife/IMG/blob/master/observer.jpg)
 
