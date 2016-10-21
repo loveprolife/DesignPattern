@@ -195,6 +195,84 @@ $flyMe->MakeFlow();
 
 3.观察者模式
 
+![image](https://github.com/loveprolife/IMG/blob/master/observer.jpg)
+
+<?php
+header("Content-type:text/html;Charset=utf-8");
+//目标接口，定义观察目标要实现的方法
+abstract class Subject{
+   abstract function attach(Observer $observer);  //添加观察者
+   abstract function detach(Observer $observer);  //去除观察者
+   abstract function notify();  //满足条件时通知所有观察者修改
+   abstract function condition($num); //发起通知的条件
+}
+//具体观察目标
+class ConcreteSubject extends Subject{
+    private $observers = array();
+    //添加观察者
+    function attach(Observer $observer){
+         $this->observers[] = $observer;
+    }
+    //移除观察者
+    function detach(Observer $observer){
+         $key=array_search($observer, $this->observers);
+         if($key !== false){  //注意不要写成!=,表达式0!=flase为flase
+              unset($this->observers[$key]);
+         }
+    }
+    //通知所有所有观察者修改
+    function notify(){
+        foreach($this->observers as $observer){
+            $observer->update();
+        }
+    }
+    //发起通知的条件
+    function condition($num){
+        if($num>100){
+            $this->notify();
+        }
+    }
+}
+
+//抽象观察者接口，定义所有观察者共同具有的属性——执行修改
+abstract class Observer{
+    abstract function update();
+}
+//具体观察者类，实现抽象观察者接口
+class ConcreteObserverA extends Observer{
+
+    function update(){
+       echo "A报告:敌军超过一百人了，快撤！<br>";
+    }
+    //其他函数
+    function eat(){
+        echo "A在吃饭";
+    }
+}
+class ConcreteObserverB extends Observer{
+
+    function update(){
+       echo "B报告:敌军超过一百人了，快撤！<br>";
+    }
+    //其他函数
+    function sleep(){
+        echo "B在睡觉";
+    }
+}
+
+
+//测试
+$observerA = new ConcreteObserverA();
+$observerB = new ConcreteObserverB();
+$concreteSubject = new ConcreteSubject();
+$concreteSubject->attach($observerA);  //添加观察者A
+$concreteSubject->detach($observerA);  //去除观察者A
+$concreteSubject->attach($observerA);
+$concreteSubject->attach($observerB);
+$concreteSubject->condition(1000);
+
+ ?>
+
 4.迭代器模式
 
 5.责任链模式
