@@ -605,6 +605,122 @@ $control->turnOff();
 
 7.备忘录模式
 
+![image](https://github.com/loveprolife/IMG/blob/master/token.png)
+
+<?php
+
+//游戏角色
+class GameRole {
+
+    #region 游戏角色状态属性（生命力、攻击力、防御力）
+    public $liveLevel;
+
+    public $attackLevel;
+
+    public $defenseLevel;
+    #endregion
+
+    //保存状态
+    public function SaveState () {
+        return (new RoleStateMemento($this->liveLevel, $this->attackLevel, $this->defenseLevel));
+    }
+
+    //恢复状态
+    public function RecoveryState (RoleStateMemento $_memento) {
+        $this->liveLevel = $_memento->liveLevel;
+        $this->attackLevel = $_memento->attackLevel;
+        $this->defenseLevel = $_memento->defenseLevel;
+    }
+
+    //获得初始状态
+    public function GetInitState () {
+        $this->defenseLevel = 100;
+        $this->attackLevel = 100;
+        $this->liveLevel = 100;
+    }
+
+    //状态显示
+    public function StateDisplay () {
+        echo "角色状态：<br/>";
+        echo "生命力：{$this->liveLevel}<br/>";
+        echo "攻击力：{$this->attackLevel}<br/>";
+        echo "防御力：{$this->defenseLevel}<br/>";
+    }
+
+    //被攻击
+    public function BeenAttack () {
+
+        $this->liveLevel -= 9.5;
+        if ($this->liveLevel <= 0) {
+            $this->liveLevel = 0;
+            echo "呃，该角色阵亡了！<br/>";
+            echo "Game Over!<br/>";
+            return;
+        }
+
+        $this->attackLevel -= 1.1;
+        if ($this->attackLevel <= 0) {
+            $this->attackLevel = 0;
+        }
+
+        $this->defenseLevel -= 0.5;
+        if ($this->defenseLevel <= 0) {
+            $this->defenseLevel = 0;
+        }
+    }
+}
+
+//角色状态存储箱类
+class RoleStateMemento {
+
+    public $liveLevel;
+    public $attackLevel;
+    public $defenseLevel;
+
+    public function RoleStateMemento ($_ll, $_al, $_dl) {
+        $this->liveLevel = $_ll;
+        $this->attackLevel = $_al;
+        $this->defenseLevel = $_dl;
+    }
+}
+
+//游戏角色状态管理者类
+class RoleStateManager {
+    public $memento;
+}
+
+//开战前
+$ufo = new GameRole();
+$ufo->GetInitState();
+echo "<span style='color:#ff0000'>----------------开战前-----------------</span><br/>";
+$ufo->StateDisplay();
+
+//保存进度
+$roleMan = new RoleStateManager();
+$roleMan->memento = $ufo->SaveState();
+
+echo "<span style='color:#ff0000'>----------------战斗中-----------------</span><br/>";
+
+$num = 1;
+//大战Boss5个回合
+for ($i = 0; $i <13;$i++ ) {
+    echo "-------------第{$num}回合-------------<br/>";
+    $ufo->BeenAttack();
+    $ufo->StateDisplay();
+    $num++;
+    //角色阵亡
+    if ($ufo->liveLevel <= 0) {
+        break;
+    }
+}
+
+echo "<span style='color:#ff0000'>----------------恢复状态-----------------</span><br/>";
+//恢复之前状态
+$ufo->RecoveryState($roleMan->memento);
+$ufo->StateDisplay();
+
+?>
+
 8.状态模式
 
 9.访问者模式
